@@ -1,6 +1,8 @@
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
 #include "login.h"
+#include "registerwindow.h"
+
 LoginWindow::LoginWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::LoginWindow)
@@ -45,4 +47,11 @@ void LoginWindow::deschide_aplicatia(){
 void LoginWindow::afiseaza_mesaj_invalidare(){
     ui->login_status->setText(" Numele de utilizator inexistent sau parola incorecta.");
     ui->login_status->setStyleSheet("QLabel { background-color : red; color : white; }");
+}
+
+void LoginWindow::on_inregistrare_clicked()
+{
+    RegisterWindow inregistrare;
+    inregistrare.setModal(true);
+    inregistrare.exec();
 }

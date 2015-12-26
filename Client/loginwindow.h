@@ -18,6 +18,8 @@ public:
 private slots:
     void on_login_clicked();
 
+    void on_inregistrare_clicked();
+
 private:
     Ui::LoginWindow *ui;
     void deschide_aplicatia();

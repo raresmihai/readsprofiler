@@ -12,9 +12,6 @@ public:
     bool trimite_datele_la_server();
     bool primeste_raspuns_de_la_server();
     bool este_autentificat();
-    char * return_user(){
-        return username;
-    }
 };
 
 #endif // LOGIN_H
