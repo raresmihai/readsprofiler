@@ -1,24 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>LoginWindow</class>
- <widget class="QMainWindow" name="LoginWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="LoginWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>260</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>LoginWindow</string>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
-  <widget class="QMenuBar" name="menuBar" />
-  <widget class="QToolBar" name="mainToolBar" />
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QStatusBar" name="statusBar" />
+  <property name="maximumSize">
+   <size>
+    <width>400</width>
+    <height>260</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Reads Profiler</string>
+  </property>
+  <property name="dockOptions">
+   <set>QMainWindow::AnimatedDocks</set>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QGroupBox" name="loginGroup">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>370</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Nume utilizator</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>60</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Parola</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="login">
+     <property name="geometry">
+      <rect>
+       <x>134</x>
+       <y>105</y>
+       <width>98</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Autentificare</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="username_input">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>15</y>
+       <width>160</width>
+       <height>27</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="password_input">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>55</y>
+       <width>160</width>
+       <height>27</height>
+      </rect>
+     </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Password</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="login_status">
+     <property name="geometry">
+      <rect>
+       <x>2</x>
+       <y>155</y>
+       <width>361</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>210</y>
+      <width>131</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Nu ai inca un cont?</string>
+    </property>
+   </widget>
+   <widget class="QCommandLinkButton" name="inregistrare">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>200</y>
+      <width>110</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Inregistrare</string>
+    </property>
+   </widget>
+  </widget>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>
