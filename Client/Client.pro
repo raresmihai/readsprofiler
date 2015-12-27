@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         loginwindow.cpp \
     login.cpp \
     registerwindow.cpp \
-    register.cpp
+    register.cpp \
+    global.cpp
 
 HEADERS  += loginwindow.h \
     login.h \
     registerwindow.h \
-    register.h
+    register.h \
+    global.h
 
 FORMS    += loginwindow.ui \
     registerwindow.ui

@@ -23,6 +23,7 @@ void LoginWindow::on_login_clicked(){
     char *parola = (char*)malloc(sizeof(pw));
     strcpy(username,nume.toStdString().c_str());
     strcpy(parola,pw.toStdString().c_str());
+
     Login utilizator(username,parola);
     if(utilizator.datele_sunt_valide()){
         utilizator.trimite_datele_la_server();

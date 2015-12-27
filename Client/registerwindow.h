@@ -2,6 +2,7 @@
 #define REGISTERWINDOW_H
 
 #include <QDialog>
+#include "register.h"
 
 namespace Ui {
 class RegisterWindow;
@@ -15,8 +16,12 @@ public:
     explicit RegisterWindow(QWidget *parent = 0);
     ~RegisterWindow();
 
+private slots:
+    void on_inregistrare_clicked();
+
 private:
     Ui::RegisterWindow *ui;
+    Register utilizator;
 };
 
 #endif // REGISTERWINDOW_H
