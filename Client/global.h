@@ -23,7 +23,7 @@ protected:
 
 
 
-bool contine_caractere_invalide(char * text,int optiune);
+bool contine_caractere_invalide(char text[32],int optiune);
 
 
 

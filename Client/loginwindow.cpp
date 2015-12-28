@@ -55,4 +55,5 @@ void LoginWindow::on_inregistrare_clicked()
     RegisterWindow inregistrare;
     inregistrare.setModal(true);
     inregistrare.exec();
+    int i;
 }

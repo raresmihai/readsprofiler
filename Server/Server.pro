@@ -9,5 +9,11 @@ CONFIG -= app_bundle
 QTPLUGIN += qsqlmysql
 TEMPLATE = app
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    login.cpp \
+    register.cpp
+
+HEADERS += \
+    login.h \
+    register.h
 

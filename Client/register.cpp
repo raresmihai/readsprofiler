@@ -2,34 +2,35 @@
 
 Register::Register(){
     raspuns = 0;
+    caz = 2;
 }
 
 void Register::setare_campuri(QString un,QString pw,QString cp,QString nm,QString pren,QString em){
-    username = (char*)malloc(sizeof(un)); strcpy(username,un.toStdString().c_str());
-    parola = (char*)malloc(sizeof(pw)); strcpy(parola,pw.toStdString().c_str());
-    confParola = (char*)malloc(sizeof(cp)); strcpy(confParola,cp.toStdString().c_str());
-    nume = (char*)malloc(sizeof(nm)); strcpy(nume,nm.toStdString().c_str());
-    prenume = (char*)malloc(sizeof(pren)); strcpy(prenume,pren.toStdString().c_str());
-    email = (char*)malloc(sizeof(em)); strcpy(email,em.toStdString().c_str());
+    strcpy(client.username,un.toStdString().c_str());
+    strcpy(client.parola,pw.toStdString().c_str());
+    strcpy(client.nume,nm.toStdString().c_str());
+    strcpy(client.prenume,pren.toStdString().c_str());
+    strcpy(client.email,em.toStdString().c_str());
+    strcpy(confParola,cp.toStdString().c_str());
 }
 
 int Register::datele_sunt_valide(){
-    if(strlen(username)==0||strlen(parola)==0||strlen(confParola)==0){
+    if(strlen(client.username)==0||strlen(client.parola)==0||strlen(confParola)==0){
         return 0;
     }
-    if(contine_caractere_invalide(username,1)){
+    if(contine_caractere_invalide(client.username,1)){
         return -1;
     }
-    if(contine_caractere_invalide(nume,2)){
+    if(contine_caractere_invalide(client.nume,2)){
         return -2;
     }
-    if(contine_caractere_invalide(prenume,2)){
+    if(contine_caractere_invalide(client.prenume,2)){
         return -3;
     }
-    if(strlen(parola)<6){
+    if(strlen(client.parola)<6){
         return -4;
     }
-    if(strcmp(parola,confParola)!=0){
+    if(strcmp(client.parola,confParola)!=0){
         return -5;
     }
     return 1;
@@ -73,19 +74,12 @@ bool Register::trimite_datele_la_server(){
     if(conectat == 0){
         conectare_la_server();
     }
-    if(write(sd,username,sizeof(username))<=0){
+    if(write(sd,&caz,sizeof(int))<=0){
+        conectat = 0;
         return 0;
     }
-    if(write(sd,parola,sizeof(parola))<=0){
-        return 0;
-    }
-    if(write(sd,nume,sizeof(nume))<0){
-        return 0;
-    }
-    if(write(sd,prenume,sizeof(prenume))<0){
-        return 0;
-    }
-    if(write(sd,email,sizeof(email))<0){
+    if(write(sd,&client,sizeof(utilizator))<=0){
+        conectat = 0;
         return 0;
     }
     return 1;

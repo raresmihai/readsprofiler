@@ -1,6 +1,6 @@
 #include "global.h"
 
-bool contine_caractere_invalide(char * text,int optiune){
+bool contine_caractere_invalide(char text[32],int optiune){
     switch(optiune){
     case 1: //username
         for(int i=0;i<strlen(text);++i){

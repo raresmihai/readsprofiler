@@ -3,14 +3,21 @@
 
 #include "global.h"
 
-
+typedef struct utilizator{
+    char username[32];
+    char parola[32];
+    char nume[32];
+    char prenume[32];
+    char email[32];
+}utilizator;
 
 class Register:public Comunicare
 {
 private:
-    char *username, *parola, *confParola;
-    char *nume, *prenume, *email;
+    utilizator client;
+    char confParola[32];
     bool raspuns;
+    int caz;
 public:
     Register();
     void setare_campuri(QString un,QString pw,QString cp,QString nm,QString pren,QString em);
@@ -21,5 +28,7 @@ public:
     QString obtine_mesaj_invalidare1(int caz);
     QString obtine_mesaj_invalidare2(int caz);
 };
+
+
 
 #endif // REGISTER_H
