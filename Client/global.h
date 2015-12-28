@@ -25,6 +25,8 @@ protected:
 
 bool contine_caractere_invalide(char text[32],int optiune);
 
+const char *strlwr(const char *str);
+
 
 
 #endif // GLOBAL

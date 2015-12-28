@@ -6,12 +6,13 @@ Register::Register(){
 }
 
 void Register::setare_campuri(QString un,QString pw,QString cp,QString nm,QString pren,QString em){
-    strcpy(client.username,un.toStdString().c_str());
+    strcpy(client.username,strlwr(un.toStdString().c_str()));
     strcpy(client.parola,pw.toStdString().c_str());
     strcpy(client.nume,nm.toStdString().c_str());
     strcpy(client.prenume,pren.toStdString().c_str());
     strcpy(client.email,em.toStdString().c_str());
     strcpy(confParola,cp.toStdString().c_str());
+
 }
 
 int Register::datele_sunt_valide(){

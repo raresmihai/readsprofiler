@@ -20,6 +20,16 @@ bool contine_caractere_invalide(char text[32],int optiune){
     return 0;
 }
 
+const char *strlwr(const char *str)
+{
+    unsigned char *p = (unsigned char *)str;
+    while (*p) {
+        *p = tolower(*p);
+        p++;
+    }
+    return str;
+}
+
 void Comunicare::conectare_la_server(){
     sd = socket(AF_INET, SOCK_STREAM, 0);
     server.sin_family = AF_INET;
