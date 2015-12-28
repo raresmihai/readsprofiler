@@ -17,7 +17,6 @@ private:
     utilizator client;
     char confParola[32];
     bool raspuns;
-    int caz;
 public:
     Register();
     void setare_campuri(QString un,QString pw,QString cp,QString nm,QString pren,QString em);

@@ -20,7 +20,12 @@
 #include <signal.h>
 #include <pthread.h>
 
-void autentificare(int client_descriptor, QSqlDatabase db);
+typedef struct user{
+    char username[32];
+    char parola[32];
+}user;
+
+void autentificare(int client_descriptor);
 
 #endif // LOGIN
 

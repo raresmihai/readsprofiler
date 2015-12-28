@@ -2,6 +2,9 @@
 #define LOGINWINDOW_H
 
 #include <QMainWindow>
+#include <QCloseEvent>
+#include <QMessageBox>
+#include "login.h"
 
 namespace Ui {
 class LoginWindow;
@@ -20,10 +23,13 @@ private slots:
 
     void on_inregistrare_clicked();
 
+    void closeEvent(QCloseEvent *);
+
 private:
     Ui::LoginWindow *ui;
+    Login utilizator;
     void deschide_aplicatia();
-    void afiseaza_mesaj_invalidare();
+    void afiseaza_mesaj_invalidare(int caz);
 };
 
 #endif // LOGINWINDOW_H

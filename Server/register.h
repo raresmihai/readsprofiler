@@ -21,14 +21,16 @@
 #include <pthread.h>
 
 typedef struct utilizator{
-    char username[30];
-    char parola[30];
-    char nume[30];
-    char prenume[30];
-    char email[30];
+    char username[32];
+    char parola[32];
+    char nume[32];
+    char prenume[32];
+    char email[32];
 }utilizator;
 
-void inregistrare(int client_descriptor, QSqlDatabase db);
+void inregistrare(int client_descriptor);
+
+void inregistrare_in_bd(utilizator client);
 
 #endif // REGISTER
 

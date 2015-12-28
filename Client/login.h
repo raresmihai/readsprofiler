@@ -1,17 +1,26 @@
 #ifndef LOGIN_H
 #define LOGIN_H
-#include<QString>
+#include "global.h"
 
-class Login{
+typedef struct user{
+    char username[32];
+    char parola[32];
+}user;
+
+class Login:public Comunicare
+{
 private:
-    char *username, *parola;
-    bool autentificare = 0;
+    user client;
+    bool autentificare;
 public:
-    Login(char* nume, char* pw);
-    bool datele_sunt_valide();
+    Login();
+    void setare_campuri(QString un,QString pw);
+    int datele_sunt_valide();
     bool trimite_datele_la_server();
     bool primeste_raspuns_de_la_server();
     bool este_autentificat();
+    QString mesaj_utilizator_existent();
+    QString mesaj_date_invalide(int caz);
 };
 
 #endif // LOGIN_H

@@ -104,13 +104,14 @@ static void *treat_client(void * arg)
             switch(caz)
             {
             case 0:
+                printf("Am inchis conexiunea pentru clientul %d",tdL.idThread);
                 close ((long)arg);//inchide conexiunea
                 return(NULL);
             case 1:
-                autentificare(tdL.cl,db);
+                autentificare(tdL.cl);
                 break;
             case 2:
-                inregistrare(tdL.cl,db);
+                inregistrare(tdL.cl);
                 break;
             }
         }

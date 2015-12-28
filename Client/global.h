@@ -13,12 +13,14 @@
 #include<arpa/inet.h>
 
 class Comunicare{
-protected:
+public:
     bool conectat = 0;
     int sd;
     struct sockaddr_in server;
     int port = 3000;
+    int caz;
     void conectare_la_server();
+    void inchide_conexiunea();
 };
 
 

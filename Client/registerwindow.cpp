@@ -40,7 +40,10 @@ void RegisterWindow::on_inregistrare_clicked()
                 if(utilizator.este_inregistrat()){
                     ui->register_status1->setText("Inregistrare reusita!");
                    // ui->register_status2->setText("Fereastra se va inchide automat in 3 secunde.");
-
+                }
+                else{
+                    ui->register_status1->setText("Utilizator deja existent.");
+                    ui->register_status2->setText("Incercati un alt nume de utilizator.");
                 }
             }
         }

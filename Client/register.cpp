@@ -87,9 +87,13 @@ bool Register::trimite_datele_la_server(){
 }
 
 bool Register::primeste_raspuns_de_la_server(){
+    if(read(sd,&raspuns,1)<=0){
+        conectat = 0;
+        return 0;
+    }
     return 1;
 }
 
 bool Register::este_inregistrat(){
-    return 1;
+    return raspuns;
 }

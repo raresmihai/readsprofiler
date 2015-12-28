@@ -41,3 +41,8 @@ void Comunicare::conectare_la_server(){
     }
     conectat = 1;
 }
+
+void Comunicare::inchide_conexiunea(){
+    caz = 0;
+    write(sd,&caz,sizeof(int));
+}
