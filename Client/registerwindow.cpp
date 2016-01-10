@@ -54,3 +54,5 @@ void RegisterWindow::on_inregistrare_clicked()
         ui->register_status2->setText(utilizator.obtine_mesaj_invalidare2(validareDate));
     }
 }
+
+

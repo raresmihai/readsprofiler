@@ -1,5 +1,7 @@
 #include "login.h"
 #include "register.h"
+#include "upload.h"
+
 using namespace std;
 #define PORT 3000
 
@@ -55,14 +57,14 @@ int main(int argc, char *argv[])
     if(!db.open()){
         qDebug("Eroare la conectarea cu baza de date.");
     }
-
+    printf ("[server]Asteptam clienti la portul %d...\n",PORT);
     while (1)
     {
         int client;
         thData * td;
         socklen_t length = sizeof (from);
 
-        printf ("[server]Asteptam clienti la portul %d...\n",PORT);
+
         fflush (stdout);
 
         if ( (client = accept (sd, (struct sockaddr *) &from, &length)) < 0)
@@ -78,19 +80,37 @@ int main(int argc, char *argv[])
 
         pthread_create(&th[i], NULL, &treat_client, td);
     }
+    /*char buffer[10000];
 
-
+    FILE* p_infile = 0;
+    FILE* p_outfile = 0;
+    int length = 0;
+    int done = 0;
+    p_infile = fopen("rating.png","r");
+    if(p_infile==NULL) perror("Eroare deschidere fisier");
+    else{
+        fgets(buffer,10000,p_infile);
+    }
+    QByteArray inByteArray(buffer,10000);
+    QSqlQuery query;
+    query.prepare( "INSERT INTO fisiere (nume, imagedata) VALUES ('rating.png', :imageData)" );
+        query.bindValue( ":imageData", inByteArray );
+        if( !query.exec() )
+            qDebug() << "Error inserting image into table:\n" << query.lastError();
+*/
     return a.exec();
 }
+
 
 static void *treat_client(void * arg)
 {
     struct thData tdL;
     tdL= *((struct thData*)arg);
-    printf ("[thread] Se trateaza clietul %d...\n", tdL.idThread);
+    printf ("[thread] S-a conectat clientul %d...\n", tdL.idThread);
     pthread_detach(pthread_self());
     int caz;
-    while(1)
+    bool clientulEsteConectat = true;
+    while(clientulEsteConectat)
     {
         if(read(tdL.cl, &caz,sizeof(int)) <= 0) //e posibil sa trebuiasca select
         {
@@ -104,18 +124,73 @@ static void *treat_client(void * arg)
             switch(caz)
             {
             case 0:
-                printf("Am inchis conexiunea pentru clientul %d",tdL.idThread);
+                printf("Am inchis conexiunea pentru clientul %d.\n",tdL.idThread);
                 close ((long)arg);//inchide conexiunea
+                clientulEsteConectat = false;
                 return(NULL);
             case 1:
+                printf("Se incearca autentificarea pentru clientul %d.\n",tdL.idThread);
                 autentificare(tdL.cl);
                 break;
             case 2:
+                printf("Se incearca inregistrarea pentru clientul %d.\n",tdL.idThread);
                 inregistrare(tdL.cl);
                 break;
+            case 5:
+                printf("Se incearca Upload de carte pentru clientul %d.\n",tdL.idThread);
+                upload_carte(tdL.cl);
+                break;
+            case 20:
+                printf("Clientul %d a parasit serviciul inregistrare.\n",tdL.idThread);
+                break;
+
             }
         }
 
     }
+
+}
+
+void aupload(int cd)
+{
+    int dimens ;
+    read(cd,&dimens,4);
+    printf("DImensiunea este %d",dimens);
+    QByteArray imgData;
+
+    int nbytes;
+    char bytes[dimens];
+    int nrr  = read(cd,&bytes,dimens);
+    for(int i=0;i<dimens;i++)
+    {
+        imgData.push_back(bytes[i]);
+    }
+
+    QSqlQuery query;
+    query.prepare( "INSERT INTO fisiere (nume, imagedata) VALUES ('incercare7.png', :imageData)" );
+        query.bindValue( ":imageData", imgData );
+        if( !query.exec() )
+            qDebug() << "Error inserting image into table:\n" << query.lastError();
+
+}
+
+void adownload(int cd)
+{
+    QSqlQuery query;
+    if( !query.exec("SELECT imagedata FROM fisiere WHERE nume = 'incercare7.png'") )
+        qDebug() << "Error inserting image into table:\n" << query.lastError();
+    query.first();
+    QByteArray outByteArray = query.value(0).toByteArray();
+    int dimens = (int)outByteArray.size();
+    write(cd,&dimens,4);
+    char img_data[dimens];
+    for(int i=0;i<dimens;i++)
+    {
+        img_data[i]=outByteArray[i];
+    }
+    int nb =  write(cd,&img_data,dimens);
+    int x;
+    x = nb;
+    x++;
 
 }

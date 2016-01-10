@@ -18,15 +18,20 @@ SOURCES += main.cpp\
     registerwindow.cpp \
     register.cpp \
     global.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    upload.cpp
 
 HEADERS  += loginwindow.h \
     login.h \
     registerwindow.h \
     register.h \
     global.h \
-    mainwindow.h
+    mainwindow.h \
+    upload.h
 
 FORMS    += loginwindow.ui \
     registerwindow.ui \
     mainwindow.ui
+
+RESOURCES += \
+    imagini.qrc

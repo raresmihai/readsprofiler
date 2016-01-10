@@ -30,6 +30,13 @@ const char *strlwr(const char *str)
     return str;
 }
 
+Comunicare::Comunicare(){
+    port = 3000;
+}
+
+bool Comunicare::conectat = 0;
+int Comunicare::sd = 16;
+
 void Comunicare::conectare_la_server(){
     sd = socket(AF_INET, SOCK_STREAM, 0);
     server.sin_family = AF_INET;
@@ -44,5 +51,9 @@ void Comunicare::conectare_la_server(){
 
 void Comunicare::inchide_conexiunea(){
     caz = 0;
+    if(conectat == 0)
+    {
+        conectare_la_server();
+    }
     write(sd,&caz,sizeof(int));
 }

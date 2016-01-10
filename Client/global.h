@@ -14,11 +14,12 @@
 
 class Comunicare{
 public:
-    bool conectat = 0;
-    int sd;
+    static bool conectat;
+    static int sd;
     struct sockaddr_in server;
-    int port = 3000;
+    int port;
     int caz;
+    Comunicare();
     void conectare_la_server();
     void inchide_conexiunea();
 };
