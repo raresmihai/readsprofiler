@@ -38,8 +38,9 @@ typedef struct rezultateCarte{
     char genuri[200];
     char subgenuri[200];
     char isbn[20];
+    char descriere[200];
     int an_aparitie;
-    int rating;
+    double rating;
 }rezultateCarte;
 
 void cautare(int client_descriptor);

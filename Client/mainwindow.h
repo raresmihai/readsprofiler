@@ -5,8 +5,10 @@
 #include <QVBoxLayout>
 #include <QFile>
 #include <QFileDialog>
+#include <QTextBrowser>
 #include "upload.h"
 #include "cautare.h"
+#include "detail.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,7 +19,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = 0,char *user = 0);
     ~MainWindow();
 
 private slots:
@@ -42,15 +44,22 @@ private slots:
 
     void on_btn_cautare_clicked();
 
+    void descarcare_continut();
+
 private:
     Ui::MainWindow *ui;
     int nr_genuri;
     int nr_subgenuri;
     int tree_index;
+    int nr_taburi;
+    int item_index;
+    char *username;
     Upload upload;
     Cautare cautare;
+    Detail detalii_carte;
     void setare_genuri(detaliiCarte &copieCarte);
     void setare_subgenuri(detaliiCarte &copieCarte);
+
 };
 
 #endif // MAINWINDOW_H

@@ -78,7 +78,7 @@
         <x>0</x>
         <y>0</y>
         <width>800</width>
-        <height>210</height>
+        <height>230</height>
        </rect>
       </property>
       <property name="sizeAdjustPolicy">
@@ -101,12 +101,12 @@
       </column>
       <column>
        <property name="text">
-        <string>Genuri</string>
+        <string>Gen</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Subgenuri</string>
+        <string>Subgen</string>
        </property>
       </column>
       <column>
@@ -124,7 +124,7 @@
       <property name="geometry">
        <rect>
         <x>340</x>
-        <y>210</y>
+        <y>240</y>
         <width>99</width>
         <height>27</height>
        </rect>

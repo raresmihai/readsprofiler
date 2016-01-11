@@ -2,6 +2,9 @@
 #include "register.h"
 #include "upload.h"
 #include "cautare.h"
+#include "coperta.h"
+#include "continut.h"
+
 using namespace std;
 #define PORT 3000
 
@@ -143,6 +146,14 @@ static void *treat_client(void * arg)
             case 5:
                 printf("Se incearca Upload de carte pentru clientul %d.\n",tdL.idThread);
                 upload_carte(tdL.cl);
+                break;
+            case 6:
+                printf("Se incearca descarcarea unei coperti pentru clientul %d.\n",tdL.idThread);
+                trimite_coperta_la_client(tdL.cl);
+                break;
+            case 7:
+                printf("Se incearca descarcarea unei continut de carte pentru clientul %d.\n",tdL.idThread);
+                trimite_continut_la_client(tdL.cl);
                 break;
             case 20:
                 printf("Clientul %d a parasit serviciul inregistrare.\n",tdL.idThread);
