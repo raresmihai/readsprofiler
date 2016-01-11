@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(close_tab(int)));
     nr_genuri = 1;
     nr_subgenuri = 1;
+    tree_index = 0;
     ui->gen2->hide();ui->gen3->hide();ui->gen4->hide();
     ui->subgen2->hide();ui->subgen3->hide();ui->subgen4->hide();
     ui->tabWidget->setCurrentIndex(0);
@@ -42,8 +43,8 @@ void MainWindow::on_pushButton_clicked()
     QIcon ico(":/imagini/rating.png");
    // QPixmap img(":/rating.png");
    // ui->label->setPixmap(img);
-    newItem->setIcon(3,ico);
-    QSize size(100,100);
+    newItem->setIcon(6,ico);
+    QSize size(95,95);
     ui->treeWidget->setIconSize(size);
 
 
@@ -250,4 +251,49 @@ void MainWindow::on_browse_continut_clicked()
     {
         ui->status_continut->setText("Fisier selectat.");
     }
+}
+
+void MainWindow::on_btn_cautare_clicked()
+{
+    tree_index = 1;
+    QString qtitlu = ui->cautare_titlu->text();
+    QString qisbn = ui->cautare_isbn->text();
+    QString qnume_autor = ui->cautare_nume->text();
+    QString qprenume_autor = ui->cautare_prenume->text();
+    QString qgen = ui->cautare_gen->text();
+    QString qsubgen = ui->cautare_subgen->text();
+    QString qan_aparitie = ui->cautare_an->text();
+    QString qrating = ui->cautare_rating->currentText();
+
+    detaliiCautare copieDate;
+    strcpy(copieDate.an_aparitie,qan_aparitie.toStdString().c_str());
+    strcpy(copieDate.rating,qrating.toStdString().c_str());
+    strcpy(copieDate.titlu,qtitlu.toStdString().c_str());
+    strcpy(copieDate.isbn,qisbn.toStdString().c_str());
+    strcpy(copieDate.nume_autor,qnume_autor.toStdString().c_str());
+    strcpy(copieDate.prenume_autor,qprenume_autor.toStdString().c_str());
+    strcpy(copieDate.gen,qgen.toStdString().c_str());
+    strcpy(copieDate.subgen,qsubgen.toStdString().c_str());
+
+    cautare.setare_campuri(copieDate);
+    cautare.trimite_datele_la_server();
+    cautare.primeste_date_de_la_server();
+
+    ui->treeWidget->clear();
+    for(int i=0;i<cautare.nr_rezultate;i++)
+    {
+        QTreeWidgetItem *newItem = new QTreeWidgetItem;
+        newItem->setText(0,QString::number(tree_index));
+        newItem->setText(1,cautare.rezultate[i].titlu);
+        QString autor(QString::fromStdString(cautare.rezultate[i].nume_autor) + " " + QString::fromStdString(cautare.rezultate[i].prenume_autor));
+        newItem->setText(2,autor);
+        newItem->setText(3,cautare.rezultate[i].genuri);
+        newItem->setText(4,cautare.rezultate[i].subgenuri);
+        newItem->setText(5,QString::number(cautare.rezultate[i].an_aparitie));
+        newItem->setText(6,QString::number(cautare.rezultate[i].rating));
+        ui->treeWidget->addTopLevelItem(newItem);
+        tree_index++;
+    }
+    int x;
+    x = 1;
 }

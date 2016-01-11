@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include "upload.h"
+#include "cautare.h"
 
 namespace Ui {
 class MainWindow;
@@ -39,11 +40,15 @@ private slots:
 
     void on_browse_continut_clicked();
 
+    void on_btn_cautare_clicked();
+
 private:
     Ui::MainWindow *ui;
     int nr_genuri;
     int nr_subgenuri;
+    int tree_index;
     Upload upload;
+    Cautare cautare;
     void setare_genuri(detaliiCarte &copieCarte);
     void setare_subgenuri(detaliiCarte &copieCarte);
 };

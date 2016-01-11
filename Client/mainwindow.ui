@@ -66,7 +66,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab_main">
      <attribute name="title">
@@ -104,34 +104,21 @@
         <string>Genuri</string>
        </property>
       </column>
-      <item>
+      <column>
        <property name="text">
-        <string>1.</string>
+        <string>Subgenuri</string>
        </property>
+      </column>
+      <column>
        <property name="text">
-        <string>Mica Sirena</string>
+        <string>An</string>
        </property>
+      </column>
+      <column>
        <property name="text">
-        <string>Bossulica</string>
+        <string>Rating</string>
        </property>
-       <property name="text">
-        <string>pesti acvariu drama</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>2.</string>
-       </property>
-       <property name="text">
-        <string> Claudiu</string>
-       </property>
-       <property name="text">
-        <string>Rares</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </item>
+      </column>
      </widget>
      <widget class="QPushButton" name="pushButton">
       <property name="geometry">

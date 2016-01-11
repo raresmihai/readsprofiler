@@ -1,7 +1,7 @@
 #include "login.h"
 #include "register.h"
 #include "upload.h"
-
+#include "cautare.h"
 using namespace std;
 #define PORT 3000
 
@@ -135,6 +135,10 @@ static void *treat_client(void * arg)
             case 2:
                 printf("Se incearca inregistrarea pentru clientul %d.\n",tdL.idThread);
                 inregistrare(tdL.cl);
+                break;
+            case 3:
+                printf("Se incearca cautarea de carti pentru clientul %d.\n",tdL.idThread);
+                cautare(tdL.cl);
                 break;
             case 5:
                 printf("Se incearca Upload de carte pentru clientul %d.\n",tdL.idThread);
