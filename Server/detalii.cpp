@@ -20,6 +20,7 @@ void trimite_detalii_la_client(int client_descriptor)
     if(write(client_descriptor,&dimens,4)<=0){
         perror("Eroare la scrierea dimensiunii copertii.\n");
     }
+
     char img_data[dimens];
     for(int i=0;i<dimens;i++)
     {

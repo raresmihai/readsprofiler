@@ -52,6 +52,16 @@ private slots:
 
     void closeEvent(QCloseEvent *);
 
+    void on_recomandare1_clicked();
+
+    void on_recomandare2_clicked();
+
+    void on_recomandare3_clicked();
+
+    void on_recomandare4_clicked();
+
+    void on_recomandare5_clicked();
+
 private:
     Ui::MainWindow *ui;
     int nr_genuri;
@@ -62,12 +72,15 @@ private:
     int item_index;
     int taburi_inchise;
     char *username;
+
     Upload upload;
     Cautare cautare;
     Detail detalii_carte;
     Recomandare recomandare;
     void setare_genuri(detaliiCarte &copieCarte);
     void setare_subgenuri(detaliiCarte &copieCarte);
+    void clear_qlines();
+    void afisare_recomandari();
     QIcon setare_rating(double rating);
     QPixmap imagine_rating(double rating);
 };

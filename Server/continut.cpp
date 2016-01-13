@@ -21,14 +21,33 @@ void trimite_continut_la_client(int client_descriptor)
     if(write(client_descriptor,&dimens,4)<=0){
         perror("Eroare la scrierea dimensiunii continutului.\n");
     }
+
+
     char file_data[dimens];
-    for(int i=0;i<dimens;i++)
+    int bytes_wrote = 0;
+    while(bytes_wrote<dimens)
+    {
+        int k=0;
+        while(k<512 && bytes_wrote + k < dimens)
+        {
+            file_data[k] = outByteArray[k+bytes_wrote];
+            k++;
+        }
+        if(write(client_descriptor,&file_data,k)<0){
+            perror("Eroare la scrierea continutului.\n");
+        }
+        bytes_wrote+=k;
+    }
+
+
+
+    /*for(int i=0;i<dimens;i++)
     {
         file_data[i]=outByteArray[i];
     }
     if(write(client_descriptor,&file_data,dimens)!=dimens){
         perror("Eroare la scrierea continutului.\n");
-    }
+    }*/
 
     //inserare in tabela descarcari_utilizatori
     QSqlQuery query_inserareCarte;

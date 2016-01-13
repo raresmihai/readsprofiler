@@ -52,6 +52,17 @@ double calculare_grad_recomandare(int importanta_tabela,int importanta_camp,int 
 
 void adauga_sugestie_noua(SugestieCarte *recomandariCarti,char *isbn_sugestie,double grad_recomandare);
 
-void sortare_dupa_grad(SugestieCarte *recomandariCarti);
+int sortare_dupa_grad(SugestieCarte *recomandariCarti);
 
+int top_carti_dupa_rating(SugestieCarte *topCarti);
+
+void recomanda_top_5_carti(int client_descriptor);
+
+void recomandari_similare(int client_descriptor, char *username);
+
+void recomandari_dupa_istoric(int client_descriptor, char *username);
+
+void trimite_recomandarile_clientului(int client_descriptor, SugestieCarte *recomandari);
+
+bool cartea_nu_a_fost_deja_adaugata(SugestieCarte * recomandari,char *isbn);
 #endif // RECOMANDARE_H

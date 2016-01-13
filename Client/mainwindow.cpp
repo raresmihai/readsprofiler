@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent,char *user) :
     ui->gen2->hide();ui->gen3->hide();ui->gen4->hide();
     ui->subgen2->hide();ui->subgen3->hide();ui->subgen4->hide();
     ui->tabWidget->setCurrentIndex(0);
-
+    afisare_recomandari();
 }
 
 
@@ -409,7 +409,7 @@ void MainWindow::on_browse_continut_clicked()
     QFile fileIn(filename);
     fileIn.open(QFile::ReadOnly);
     QByteArray fileData = fileIn.readAll();    
-    if(fileData.size() > 0 && fileData.size() < 1000000)
+    if(fileData.size() > 0 && fileData.size() < 2000000)
     {
         upload.setare_continut(fileData);
         ui->status_continut->setText("Fisier selectat.");
@@ -468,7 +468,57 @@ void MainWindow::on_btn_cautare_clicked()
         tree_index++;
     }
     ui->tabWidget->setCurrentIndex(0);
-    recomandare.trimite_username_la_server(username);
+    afisare_recomandari();
+}
+
+void MainWindow::afisare_recomandari()
+{
+    int caz_afisare = qrand() % 4;
+    int caz_recomandare = 3;
+    if(caz_afisare==0)
+    {
+        ui->label_recomandari->setText("Top 5 carti cu cel putin 3 voturi:");
+        caz_recomandare = 1;
+    }
+
+    caz_recomandare = recomandare.cere_recomandari(caz_recomandare,username);
+    if(caz_recomandare > 0)
+    {
+        for(int i=0;i<5;i++)
+        {
+            if(caz_recomandare == 1)
+            {
+                ui->label_recomandari->setText("Top 5 carti cu cel putin 3 voturi:");
+            }
+            else
+            {
+                ui->label_recomandari->setText("S-ar putea sa iti placa:");
+            }
+
+            QByteArray coperta = recomandare.primeste_recomandare(i);
+            QPixmap pixmap_coperta = QPixmap();
+            pixmap_coperta.loadFromData(coperta);
+            QIcon ButtonIcon(pixmap_coperta);
+            switch(i)
+            {
+            case 0:
+                ui->recomandare1->setIcon(ButtonIcon);
+                break;
+            case 1:
+                ui->recomandare2->setIcon(ButtonIcon);
+                break;
+            case 2:
+                ui->recomandare3->setIcon(ButtonIcon);
+                break;
+            case 3:
+                ui->recomandare4->setIcon(ButtonIcon);
+                break;
+            case 4:
+                ui->recomandare5->setIcon(ButtonIcon);
+                break;
+            }
+        }
+    }
 }
 
 QIcon MainWindow::setare_rating(double rating)
@@ -504,4 +554,50 @@ QPixmap MainWindow::imagine_rating(double rating)
 void MainWindow::closeEvent(QCloseEvent *)
 {
     cautare.inchide_conexiunea();
+}
+
+void MainWindow::clear_qlines()
+{
+    ui->cautare_an->clear();
+    ui->cautare_gen->clear();
+    ui->cautare_nume->clear();
+    ui->cautare_prenume->clear();
+    ui->cautare_rating->clear();
+    ui->cautare_subgen->clear();
+    ui->cautare_titlu->clear();
+}
+
+void MainWindow::on_recomandare1_clicked()
+{
+    clear_qlines();
+    ui->cautare_isbn->setText(QString(recomandare.isbn_recomandari[0]));
+    ui->btn_cautare->click();
+}
+
+void MainWindow::on_recomandare2_clicked()
+{
+    clear_qlines();
+    ui->cautare_isbn->setText(QString(recomandare.isbn_recomandari[1]));
+    ui->btn_cautare->click();
+}
+
+void MainWindow::on_recomandare3_clicked()
+{
+    clear_qlines();
+    ui->cautare_isbn->setText(QString(recomandare.isbn_recomandari[2]));
+    ui->btn_cautare->click();
+}
+
+void MainWindow::on_recomandare4_clicked()
+{
+    clear_qlines();
+    ui->cautare_isbn->setText(QString(recomandare.isbn_recomandari[3]));
+    ui->btn_cautare->click();
+}
+
+void MainWindow::on_recomandare5_clicked()
+{
+    clear_qlines();
+    ui->cautare_isbn->setText(QString(recomandare.isbn_recomandari[4]));
+    ui->btn_cautare->click();
 }
