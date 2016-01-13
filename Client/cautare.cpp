@@ -11,16 +11,22 @@ void Cautare::setare_campuri(detaliiCautare copieDate)
     date = copieDate;
 }
 
-bool Cautare::trimite_datele_la_server()
+bool Cautare::trimite_datele_la_server(char *nume)
 {
     if(conectat == 0){
         conectare_la_server();
     }
-    if(write(sd,&caz,sizeof(int))<=0){
+    if(write(sd,&caz,sizeof(int))<0){
         conectat = 0;
         return 0;
     }
     if(write(sd,&date,sizeof(detaliiCautare))<0){
+        conectat = 0;
+        return 0;
+    }
+    char username[50];
+    strcpy(username,nume);
+    if(write(sd,&username,50)<0){
         conectat = 0;
         return 0;
     }

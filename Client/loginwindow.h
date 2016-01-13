@@ -28,8 +28,8 @@ private slots:
 private:
     Ui::LoginWindow *ui;
     Login utilizator;
-    void deschide_aplicatia();
     void afiseaza_mesaj_invalidare(int caz);
+    bool conexiuneaTrebuieInchisa;
 };
 
 #endif // LOGINWINDOW_H

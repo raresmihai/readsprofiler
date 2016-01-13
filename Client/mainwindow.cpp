@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent,char *user) :
 
     username = user;
     ui->setupUi(this);
+    ui->label_welcome->setText("Bine ai venit, " + QString(username));
     this->setFixedSize(this->size());
     ui->label_welcome->setAlignment(Qt::AlignCenter);
     ui->tabWidget->setTabsClosable(true);
@@ -20,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent,char *user) :
     nr_genuri = 1;
     nr_subgenuri = 1;
     tree_index = 0;
+    total_taburi = 2;
     nr_taburi = 2;
     ui->gen2->hide();ui->gen3->hide();ui->gen4->hide();
     ui->subgen2->hide();ui->subgen3->hide();ui->subgen4->hide();
@@ -49,32 +51,27 @@ void MainWindow::on_pushButton_clicked()
         QString subgenuri_carte = selectedItem->text(4);
         QString an_aparitie = selectedItem->text(5);
 
-        double val_rating = selectedItem->text(6).toDouble();
+        double val_rating = cautare.rezultate[item_index].rating;
 
 
-        QByteArray img_data  = detalii_carte.primeste_coperta(cautare.rezultate[item_index].isbn);
+        QByteArray img_data  = detalii_carte.primeste_detalii(cautare.rezultate[item_index].isbn,username);
         QPixmap pixmap_coperta = QPixmap();
         pixmap_coperta.loadFromData(img_data);
-         //   ui->img_lab->setPixmap(outPixmap);*/
-        //QString titlu_carte = newItem->text(1);
-        //QIcon ico(":/imagini/rating.png");
-       // QPixmap img(":/rating.png");
-       // ui->label->setPixmap(img);
-       // newItem->setIcon(6,ico);
-       // QSize size(95,95);
-       // ui->treeWidget->setIconSize(size);
 
+        QPixmap img_rating(imagine_rating(val_rating));
 
-       // ui->treeWidget->addTopLevelItem(newItem);
+        ui->tabWidget->addTab(new QWidget,tr("Detalii"));
+        ui->tabWidget->widget(nr_taburi)->setObjectName(QString::number(total_taburi));
 
-        ui->tabWidget->addTab(new QWidget,tr("Detail"));
         QGroupBox *gbox = new QGroupBox(ui->tabWidget->widget(nr_taburi));
-
         gbox->setGeometry(0,0,800,270);
+        gbox->setObjectName("gbox" + QString::number(total_taburi));
 
         QLabel *ltitlu = new QLabel(titlu_carte,gbox);
         ltitlu->setGeometry(10,10,340,30);
         ltitlu->setAlignment(Qt::AlignCenter);
+        QFont f("Serif",13,QFont::Bold,1);
+        ltitlu->setFont(f);
         QLabel *lautor = new QLabel("Autor:",gbox);
         lautor->setGeometry(10,60,92,17);
         QLabel *lgenuri = new QLabel("Genuri:",gbox);
@@ -89,18 +86,24 @@ void MainWindow::on_pushButton_clicked()
         QLabel *autor = new QLabel(autor_carte,gbox);
         autor->setGeometry(110,60,240,20);
         autor->setAlignment(Qt::AlignCenter);
+        autor->setFrameStyle(QFrame::Box | QFrame::Sunken);
         QLabel *genuri = new QLabel(genuri_carte,gbox);
         genuri->setGeometry(110,100,240,20);
         genuri->setAlignment(Qt::AlignCenter);
+        genuri->setFrameStyle(QFrame::Box | QFrame::Sunken);
         QLabel *subgenuri = new QLabel(subgenuri_carte,gbox);
         subgenuri->setGeometry(110,140,240,20);
         subgenuri->setAlignment(Qt::AlignCenter);
+        subgenuri->setFrameStyle(QFrame::Box | QFrame::Sunken);
         QLabel *an = new QLabel(an_aparitie,gbox);
         an->setGeometry(110,180,240,20);
         an->setAlignment(Qt::AlignCenter);
+        an->setFrameStyle(QFrame::Box | QFrame::Sunken);
         QLabel *isbn = new QLabel(cautare.rezultate[item_index].isbn,gbox);
         isbn->setGeometry(110,220,240,20);
         isbn->setAlignment(Qt::AlignCenter);
+        isbn->setFrameStyle(QFrame::Box | QFrame::Sunken);
+        isbn->setObjectName("isbn"+ QString::number(total_taburi));
 
         QLabel *ldescriere = new QLabel("Descriere",gbox);
         ldescriere->setGeometry(610,0,70,20);
@@ -109,17 +112,42 @@ void MainWindow::on_pushButton_clicked()
         descriere->setGeometry(530,30,240,70);
         descriere->setText(cautare.rezultate[item_index].descriere);
 
-        QComboBox *rating = new QComboBox(gbox);
-        rating->setGeometry(550,130,90,27);
-        rating->addItem("");rating->addItem("1");
-        rating->addItem("2");rating->addItem("3");
-        rating->addItem("4");rating->addItem("5");
-        QPushButton *voteaza = new QPushButton("Voteaza",gbox);
-        voteaza->setGeometry(650,130,100,27);
+        QLabel *status_votare = new QLabel("Vot inregistrat!",gbox);
+        status_votare->hide();
+        status_votare->setGeometry(550,140,120,25);
+        status_votare->setAlignment(Qt::AlignCenter);
+        status_votare->setFrameStyle(QFrame::Box | QFrame::Sunken);
+        status_votare->setObjectName("status_votare" + QString::number(total_taburi));
+        if(detalii_carte.a_mai_votat==false)
+        {
+            QComboBox *rating = new QComboBox(gbox);
+            rating->setGeometry(550,130,90,27);
+            rating->addItem("");rating->addItem("1");
+            rating->addItem("2");rating->addItem("3");
+            rating->addItem("4");rating->addItem("5");
+            rating->setObjectName("valori_rating" + QString::number(total_taburi));
+            QPushButton *voteaza = new QPushButton("Voteaza",gbox);
+            voteaza->setGeometry(650,130,100,27);
+            voteaza->setObjectName("btn_voteaza" + QString::number(total_taburi));
+            connect(voteaza, SIGNAL (released()), this, SLOT (voteaza_carte()));
+        }
+        else
+        {
+            QLabel *afisare_rating = new QLabel("Rating acordat: ",gbox);
+            afisare_rating->setGeometry(550,130,120,20);
+            afisare_rating->setAlignment(Qt::AlignCenter);
+            QLabel *rating_acordat = new QLabel(QString::number(detalii_carte.rating_acordat),gbox);
+            rating_acordat->setGeometry(680,130,23,23);
+            rating_acordat->setAlignment(Qt::AlignCenter);
+            rating_acordat->setFrameStyle(QFrame::Box | QFrame::Sunken);
+        }
 
-        QCommandLinkButton *descarca = new QCommandLinkButton("Descarca",gbox);
+
+
+
+        QCommandLinkButton *descarca = new QCommandLinkButton("Descarcare continut",gbox);
         descarca->setGeometry(560,200,185,40);
-        descarca->setObjectName("btn_descarca");
+        descarca->setObjectName("btn_descarca" + QString::number(total_taburi));
         connect(descarca, SIGNAL (released()), this, SLOT (descarcare_continut()));
 
         //pozele
@@ -129,10 +157,11 @@ void MainWindow::on_pushButton_clicked()
         coperta->setFrameStyle(QFrame::Box | QFrame::Plain);
         coperta->setPixmap(pixmap_coperta);
 
-        QLabel *stelute = new QLabel(QString::number(val_rating),gbox);
+        QLabel *stelute = new QLabel(gbox);
         stelute->setScaledContents(true);
-        stelute->setGeometry(355,180,135,27);
-        stelute->setFrameStyle(QFrame::Box | QFrame::Plain);
+        stelute->setGeometry(355,170,135,27);
+        //stelute->setFrameStyle(QFrame::Box | QFrame::Plain);
+        stelute->setPixmap(img_rating);
 
         QLabel *bara = new QLabel(gbox);
         bara->setGeometry(500,0,5,250);
@@ -145,6 +174,7 @@ void MainWindow::on_pushButton_clicked()
         ui->tabWidget->setCurrentIndex(nr_taburi);
 
         nr_taburi++;
+        total_taburi++;
     }
 
 }
@@ -158,15 +188,6 @@ void MainWindow::close_tab(int index)
     }
 }
 
-void MainWindow::descarcare_continut()
-{
-    QByteArray file_data = detalii_carte.primeste_continut(cautare.rezultate[item_index].isbn);
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"));
-    QFile file(fileName);
-    file.open(QIODevice::WriteOnly);
-    file.write(file_data);
-    file.close();
-}
 
 void MainWindow::on_gen_plus_clicked()
 {
@@ -248,6 +269,44 @@ void MainWindow::on_subgen_minus_clicked()
     }
 }
 
+void MainWindow::descarcare_continut()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"));
+    QFile file(fileName);
+    if(file.open(QIODevice::WriteOnly))
+    {
+        QString nr_tab = ui->tabWidget->currentWidget()->objectName();
+        QLabel *isbn_label = ui->tabWidget->findChild<QGroupBox *>("gbox"+nr_tab)->findChild<QLabel *>("isbn" + nr_tab);
+        char isbn[20];
+        strcpy(isbn,isbn_label->text().toStdString().c_str());
+        QByteArray file_data = detalii_carte.primeste_continut(isbn,username);
+        file.write(file_data);
+        file.close();
+    }
+}
+
+void MainWindow::voteaza_carte()
+{
+    QString nr_tab = ui->tabWidget->currentWidget()->objectName();
+    QComboBox *valori_rating = ui->tabWidget->findChild<QGroupBox *>("gbox"+nr_tab)->findChild<QComboBox *>("valori_rating" + nr_tab);
+    QString qs_rating_acordat = valori_rating->currentText();
+    int rating_acordat = qs_rating_acordat.toInt();
+    QLabel *isbn_label = ui->tabWidget->findChild<QGroupBox *>("gbox"+nr_tab)->findChild<QLabel *>("isbn" + nr_tab);
+    char isbn[20];
+    strcpy(isbn,isbn_label->text().toStdString().c_str());
+    bool ok = detalii_carte.voteaza(isbn,username,rating_acordat);
+    if(ok)
+    {
+        QGroupBox *gbox = ui->tabWidget->findChild<QGroupBox *>("gbox" + nr_tab);
+        QPushButton *btn_voteaza = gbox->findChild<QPushButton *>("btn_voteaza" + nr_tab);
+        btn_voteaza->close();
+        valori_rating->close();
+        QLabel *status_votare = gbox->findChild<QLabel *>("status_votare" + nr_tab);
+        status_votare->show();
+
+    }
+}
+
 void MainWindow::on_upload_btn_clicked()
 {
     QString qtitlu = ui->titlu_carte->text();
@@ -271,9 +330,6 @@ void MainWindow::on_upload_btn_clicked()
 
     upload.setare_campuri(copieCarte);
     upload.trimite_datele_la_server();
-    //de trimis structura la server
-    //de trimis coperta
-    //de trimis continutul
 }
 
 void MainWindow::setare_genuri(detaliiCarte &copieCarte)
@@ -352,10 +408,10 @@ void MainWindow::on_browse_continut_clicked()
     QString filename = QFileDialog::getOpenFileName(this,tr("Alege fisierul"), "",tr("Fisiere (*)"));
     QFile fileIn(filename);
     fileIn.open(QFile::ReadOnly);
-    QByteArray fileData = fileIn.readAll();
-    upload.setare_continut(fileData);
-    if(fileData.size() > 0)
+    QByteArray fileData = fileIn.readAll();    
+    if(fileData.size() > 0 && fileData.size() < 1000000)
     {
+        upload.setare_continut(fileData);
         ui->status_continut->setText("Fisier selectat.");
     }
 }
@@ -372,6 +428,13 @@ void MainWindow::on_btn_cautare_clicked()
     QString qan_aparitie = ui->cautare_an->text();
     QString qrating = ui->cautare_rating->currentText();
 
+    bool ok;//scadere 1 din rating pentru potrivirea cu afisarea imaginilor
+    int val_rating;
+    val_rating = qrating.toInt(&ok,10);
+    if(ok){
+        qrating = QString::number(val_rating-1);
+    }
+
     detaliiCautare copieDate;
     strcpy(copieDate.an_aparitie,qan_aparitie.toStdString().c_str());
     strcpy(copieDate.rating,qrating.toStdString().c_str());
@@ -383,7 +446,7 @@ void MainWindow::on_btn_cautare_clicked()
     strcpy(copieDate.subgen,qsubgen.toStdString().c_str());
 
     cautare.setare_campuri(copieDate);
-    cautare.trimite_datele_la_server();
+    cautare.trimite_datele_la_server(username);
     cautare.primeste_date_de_la_server();
 
     ui->treeWidget->clear();
@@ -397,11 +460,48 @@ void MainWindow::on_btn_cautare_clicked()
         newItem->setText(3,cautare.rezultate[i].genuri);
         newItem->setText(4,cautare.rezultate[i].subgenuri);
         newItem->setText(5,QString::number(cautare.rezultate[i].an_aparitie));
-        newItem->setText(6,QString::number(cautare.rezultate[i].rating));
+        QIcon ico = setare_rating(cautare.rezultate[i].rating);
+        newItem->setIcon(6,ico);
+        QSize size(95,95);
+        ui->treeWidget->setIconSize(size);
         ui->treeWidget->addTopLevelItem(newItem);
         tree_index++;
     }
     ui->tabWidget->setCurrentIndex(0);
+    recomandare.trimite_username_la_server(username);
 }
 
+QIcon MainWindow::setare_rating(double rating)
+{
+    if(rating==0){ QIcon ico(":/rating/ratings/0_star.png"); return ico; }
+    else if(rating<=0.5){ QIcon ico(":/rating/ratings/05_star.png"); return ico;}
+    else if(rating<=1){ QIcon ico(":/rating/ratings/1_star.png"); return ico;}
+    else if(rating<=1.5){ QIcon ico(":/rating/ratings/15_star.png"); return ico;}
+    else if(rating<=2){ QIcon ico(":/rating/ratings/2_star.png"); return ico;}
+    else if(rating<=2.5){ QIcon ico(":/rating/ratings/25_star.png"); return ico;}
+    else if(rating<=3){ QIcon ico(":/rating/ratings/3_star.png"); return ico;}
+    else if(rating<=3.5){ QIcon ico(":/rating/ratings/35_star.png"); return ico;}
+    else if(rating<=4){ QIcon ico(":/rating/ratings/4_star.png"); return ico;}
+    else if(rating<=4.5){ QIcon ico(":/rating/ratings/45_star.png"); return ico;}
+    else{ QIcon ico(":/rating/ratings/5_star.png"); return ico;}
+}
 
+QPixmap MainWindow::imagine_rating(double rating)
+{
+    if(rating==0){ QPixmap ico(":/rating/ratings/0_star.png"); return ico; }
+    else if(rating<=0.5){ QPixmap ico(":/rating/ratings/05_star.png"); return ico;}
+    else if(rating<=1){ QPixmap ico(":/rating/ratings/1_star.png"); return ico;}
+    else if(rating<=1.5){ QPixmap ico(":/rating/ratings/15_star.png"); return ico;}
+    else if(rating<=2){ QPixmap ico(":/rating/ratings/2_star.png"); return ico;}
+    else if(rating<=2.5){ QPixmap ico(":/rating/ratings/25_star.png"); return ico;}
+    else if(rating<=3){ QPixmap ico(":/rating/ratings/3_star.png"); return ico;}
+    else if(rating<=3.5){ QPixmap ico(":/rating/ratings/35_star.png"); return ico;}
+    else if(rating<=4){ QPixmap ico(":/rating/ratings/4_star.png"); return ico;}
+    else if(rating<=4.5){ QPixmap ico(":/rating/ratings/45_star.png"); return ico;}
+    else{ QPixmap ico(":/rating/ratings/5_star.png"); return ico;}
+}
+
+void MainWindow::closeEvent(QCloseEvent *)
+{
+    cautare.inchide_conexiunea();
+}

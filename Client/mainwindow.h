@@ -9,6 +9,7 @@
 #include "upload.h"
 #include "cautare.h"
 #include "detail.h"
+#include "recomandare.h"
 
 namespace Ui {
 class MainWindow;
@@ -26,6 +27,7 @@ private slots:
 
 
     void on_pushButton_clicked();
+
     void close_tab(int index);
 
     void on_gen_plus_clicked();
@@ -46,20 +48,28 @@ private slots:
 
     void descarcare_continut();
 
+    void voteaza_carte();
+
+    void closeEvent(QCloseEvent *);
+
 private:
     Ui::MainWindow *ui;
     int nr_genuri;
     int nr_subgenuri;
     int tree_index;
     int nr_taburi;
+    int total_taburi;
     int item_index;
+    int taburi_inchise;
     char *username;
     Upload upload;
     Cautare cautare;
     Detail detalii_carte;
+    Recomandare recomandare;
     void setare_genuri(detaliiCarte &copieCarte);
     void setare_subgenuri(detaliiCarte &copieCarte);
-
+    QIcon setare_rating(double rating);
+    QPixmap imagine_rating(double rating);
 };
 
 #endif // MAINWINDOW_H

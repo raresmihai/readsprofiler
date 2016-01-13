@@ -45,4 +45,7 @@ typedef struct rezultateCarte{
 
 void cautare(int client_descriptor);
 
+bool exista_camp_completat(detaliiCautare cautare);
+
+
 #endif // CAUTARE_H

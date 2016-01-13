@@ -6,6 +6,11 @@ Login::Login()
     caz = 1;
 }
 
+char * Login::get_username()
+{
+    return client.username;
+}
+
 void Login::setare_campuri(QString un, QString pw)
 {
     strcpy(client.username,strlwr(un.toStdString().c_str()));
@@ -64,3 +69,4 @@ bool Login::primeste_raspuns_de_la_server(){
 bool Login::este_autentificat(){
     return autentificare;
 }
+

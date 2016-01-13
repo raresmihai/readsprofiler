@@ -19,6 +19,7 @@ public:
     bool trimite_datele_la_server();
     bool primeste_raspuns_de_la_server();
     bool este_autentificat();
+    char * get_username();
     QString mesaj_utilizator_existent();
     QString mesaj_date_invalide(int caz);
 };

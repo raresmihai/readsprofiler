@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/rating">
+        <file>ratings/15_star.png</file>
+        <file>ratings/0_star.png</file>
+        <file>ratings/1_star.png</file>
+        <file>ratings/2_star.png</file>
+        <file>ratings/3_star.png</file>
+        <file>ratings/4_star.png</file>
+        <file>ratings/5_star.png</file>
+        <file>ratings/05_star.png</file>
+        <file>ratings/25_star.png</file>
+        <file>ratings/35_star.png</file>
+        <file>ratings/45_star.png</file>
+    </qresource>
+</RCC>

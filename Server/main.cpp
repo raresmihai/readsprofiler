@@ -2,8 +2,10 @@
 #include "register.h"
 #include "upload.h"
 #include "cautare.h"
-#include "coperta.h"
+#include "detalii.h"
 #include "continut.h"
+#include "voteaza.h"
+#include "recomandare.h"
 
 using namespace std;
 #define PORT 3000
@@ -143,17 +145,25 @@ static void *treat_client(void * arg)
                 printf("Se incearca cautarea de carti pentru clientul %d.\n",tdL.idThread);
                 cautare(tdL.cl);
                 break;
+            case 4:
+                printf("Se incearca recomandarea de carti pentru clientul %d.\n",tdL.idThread);
+                recomandare_carti(tdL.cl);
+                break;
             case 5:
                 printf("Se incearca Upload de carte pentru clientul %d.\n",tdL.idThread);
                 upload_carte(tdL.cl);
                 break;
             case 6:
-                printf("Se incearca descarcarea unei coperti pentru clientul %d.\n",tdL.idThread);
-                trimite_coperta_la_client(tdL.cl);
+                printf("Se incearca descarcarea detaliilor unei coperti pentru clientul %d.\n",tdL.idThread);
+                trimite_detalii_la_client(tdL.cl);
                 break;
             case 7:
                 printf("Se incearca descarcarea unei continut de carte pentru clientul %d.\n",tdL.idThread);
                 trimite_continut_la_client(tdL.cl);
+                break;
+            case 8:
+                printf("Se incearca votarea unei carti de catre clientul %d.\n",tdL.idThread);
+                voteaza_carte(tdL.cl);
                 break;
             case 20:
                 printf("Clientul %d a parasit serviciul inregistrare.\n",tdL.idThread);
@@ -166,46 +176,3 @@ static void *treat_client(void * arg)
 
 }
 
-void aupload(int cd)
-{
-    int dimens ;
-    read(cd,&dimens,4);
-    printf("DImensiunea este %d",dimens);
-    QByteArray imgData;
-
-    int nbytes;
-    char bytes[dimens];
-    int nrr  = read(cd,&bytes,dimens);
-    for(int i=0;i<dimens;i++)
-    {
-        imgData.push_back(bytes[i]);
-    }
-
-    QSqlQuery query;
-    query.prepare( "INSERT INTO fisiere (nume, imagedata) VALUES ('incercare7.png', :imageData)" );
-        query.bindValue( ":imageData", imgData );
-        if( !query.exec() )
-            qDebug() << "Error inserting image into table:\n" << query.lastError();
-
-}
-
-void adownload(int cd)
-{
-    QSqlQuery query;
-    if( !query.exec("SELECT imagedata FROM fisiere WHERE nume = 'incercare7.png'") )
-        qDebug() << "Error inserting image into table:\n" << query.lastError();
-    query.first();
-    QByteArray outByteArray = query.value(0).toByteArray();
-    int dimens = (int)outByteArray.size();
-    write(cd,&dimens,4);
-    char img_data[dimens];
-    for(int i=0;i<dimens;i++)
-    {
-        img_data[i]=outByteArray[i];
-    }
-    int nb =  write(cd,&img_data,dimens);
-    int x;
-    x = nb;
-    x++;
-
-}

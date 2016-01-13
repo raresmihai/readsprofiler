@@ -19,7 +19,10 @@ SOURCES += main.cpp\
     register.cpp \
     global.cpp \
     mainwindow.cpp \
-    upload.cpp
+    upload.cpp \
+    cautare.cpp \
+    detail.cpp \
+    recomandare.cpp
 
 HEADERS  += loginwindow.h \
     login.h \
@@ -27,7 +30,10 @@ HEADERS  += loginwindow.h \
     register.h \
     global.h \
     mainwindow.h \
-    upload.h
+    upload.h \
+    cautare.h \
+    detail.h \
+    recomandare.h
 
 FORMS    += loginwindow.ui \
     registerwindow.ui \

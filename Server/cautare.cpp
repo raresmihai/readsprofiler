@@ -8,6 +8,13 @@ void cautare(int client_descriptor)
     {
         perror("Eroare la citirea datelor pentru cautare.\n");
     }
+    char username[50];
+    if(read(client_descriptor,&username,50)<0)
+    {
+        perror("Eroare la citirea username pentru cautare.\n");
+    }
+
+    bool trebuieInserata = exista_camp_completat(cautare);
 
     char interogare[1000];
     QSqlQuery query;
@@ -69,5 +76,37 @@ void cautare(int client_descriptor)
         {
             perror("Eroare la scrierea rezultatelor pentru cautare.\n");
         }
+
+        //inserare in tabela cautari_rezultate
+        if(trebuieInserata)
+        {
+            QSqlQuery query_inserareCarte;
+            sprintf(interogare,"SELECT id FROM cautari_utilizatori WHERE username = '%s' AND isbn = '%s'",username,isbn);
+            if(!query_inserareCarte.exec(interogare))
+            {
+                qDebug() << "Eroare la verificarea existentei cartii in tabela cautari_utilizatori:\n" << query.lastError();
+            }
+            if(query_inserareCarte.size()==0)
+            {
+                sprintf(interogare,"INSERT INTO cautari_utilizatori(username,isbn) VALUES('%s','%s')",username,isbn);
+                if(!query_inserareCarte.exec(interogare))
+                {
+                    qDebug() << "Eroare la inserare cartii in tabela cautari_utilizatori:\n" << query.lastError();
+                }
+            }
+        }
     }
+}
+
+bool exista_camp_completat(detaliiCautare cautare)
+{
+    if(strlen(cautare.an_aparitie)>0) return true;
+    if(strlen(cautare.gen)>0) return true;
+    if(strlen(cautare.isbn)>0) return true;
+    if(strlen(cautare.nume_autor)>0) return true;
+    if(strlen(cautare.prenume_autor)>0) return true;
+    if(strlen(cautare.rating)>0) return true;
+    if(strlen(cautare.subgen)>0) return true;
+    if(strlen(cautare.titlu)>0) return true;
+    return false;
 }

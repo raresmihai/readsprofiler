@@ -20,8 +20,9 @@ typedef struct rezultateCarte{
     char genuri[200];
     char subgenuri[200];
     char isbn[20];
+    char descriere[200];
     int an_aparitie;
-    int rating;
+    double rating;
 }rezultateCarte;
 
 class Cautare:public Comunicare
@@ -33,7 +34,7 @@ public:
     rezultateCarte rezultate[1000];
     Cautare();
     void setare_campuri(detaliiCautare copieDate);
-    bool trimite_datele_la_server();
+    bool trimite_datele_la_server(char *username);
     bool primeste_date_de_la_server();
 };
 

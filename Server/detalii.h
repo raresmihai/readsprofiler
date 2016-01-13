@@ -21,6 +21,6 @@
 #include <pthread.h>
 
 
-void trimite_coperta_la_client(int client_descriptor);
+void trimite_detalii_la_client(int client_descriptor);
 
 #endif // COPERTA_H

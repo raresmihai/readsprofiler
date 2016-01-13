@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Reads Profiler</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label_welcome">
@@ -24,7 +24,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>Bine ai venit, Rares Babuta</string>
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
    <widget class="QFrame" name="frame">
@@ -66,7 +69,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_main">
      <attribute name="title">
@@ -101,12 +104,12 @@
       </column>
       <column>
        <property name="text">
-        <string>Gen</string>
+        <string>Genuri</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>Subgen</string>
+        <string>Subgenuri</string>
        </property>
       </column>
       <column>
@@ -130,7 +133,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>PushButton</string>
+       <string>Acceseaza</string>
       </property>
      </widget>
     </widget>
@@ -560,6 +563,12 @@
        <width>81</width>
        <height>17</height>
       </rect>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Sunken</enum>
      </property>
      <property name="text">
       <string>Nume autor</string>
