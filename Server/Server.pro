@@ -15,5 +15,6 @@ SOURCES += main.cpp \
 
 HEADERS += \
     login.h \
-    register.h
+    register.h \
+    recomandare.h
 
