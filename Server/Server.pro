@@ -11,10 +11,21 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     login.cpp \
-    register.cpp
+    register.cpp \
+    recomandare.cpp \
+    cautare.cpp \
+    continut.cpp \
+    upload.cpp \
+    voteaza.cpp \
+    detalii.cpp
 
 HEADERS += \
     login.h \
     register.h \
-    recomandare.h
+    recomandare.h \
+    cautare.h \
+    continut.h \
+    upload.h \
+    voteaza.h \
+    detalii.h
 
