@@ -18,29 +18,40 @@ void voteaza_carte(int client_descriptor)
         ok = false;
     }
     char interogare[1000];
-    sprintf(interogare,"SELECT * from rating WHERE isbn = '%s'",isbn);
     QSqlQuery query;
-    if(!query.exec(interogare)){
-        qDebug() << "Eroare la verificarea ratingului in tabele:\n" << query.lastError();
+
+    sprintf(interogare,"SELECT * FROM rating_utilizatori where username = '%s'AND isbn = '%s'",username,isbn);
+    query.exec(interogare);
+    if(query.size()>0)
+    {
         ok = false;
     }
-    if(query.size()==0){
-        sprintf(interogare,"INSERT INTO rating(isbn) VALUES('%s')",isbn);
+    else
+    {
+        sprintf(interogare,"SELECT * from rating WHERE isbn = '%s'",isbn);
         if(!query.exec(interogare)){
-            qDebug() << "Eroare la inserarea unui isbn in tabela rating:\n" << query.lastError();
+            qDebug() << "Eroare la verificarea ratingului in tabele:\n" << query.lastError();
+            ok = false;
+        }
+        if(query.size()==0){
+            sprintf(interogare,"INSERT INTO rating(isbn) VALUES('%s')",isbn);
+            if(!query.exec(interogare)){
+                qDebug() << "Eroare la inserarea unui isbn in tabela rating:\n" << query.lastError();
+                ok = false;
+            }
+        }
+        sprintf(interogare,"UPDATE rating SET nr_voturi = nr_voturi + 1,valoare = valoare + %d WHERE isbn = '%s'",rating,isbn);
+        if(!query.exec(interogare)){
+            qDebug() << "Eroare la actualizarea ratingului:\n" << query.lastError();
+            ok = false;
+        }
+        sprintf(interogare,"INSERT INTO rating_utilizatori(isbn,username,rating_acordat) VALUES('%s','%s',%d)",isbn,username,rating);
+        if(!query.exec(interogare)){
+            qDebug() << "Eroare la inserarea perechii rating(isbn,username):\n" << query.lastError();
             ok = false;
         }
     }
-    sprintf(interogare,"UPDATE rating SET nr_voturi = nr_voturi + 1,valoare = valoare + %d WHERE isbn = '%s'",rating,isbn);
-    if(!query.exec(interogare)){
-        qDebug() << "Eroare la actualizarea ratingului:\n" << query.lastError();
-        ok = false;
-    }
-    sprintf(interogare,"INSERT INTO rating_utilizatori(isbn,username,rating_acordat) VALUES('%s','%s',%d)",isbn,username,rating);
-    if(!query.exec(interogare)){
-        qDebug() << "Eroare la inserarea perechii rating(isbn,username):\n" << query.lastError();
-        ok = false;
-    }
+
     if(write(client_descriptor,&ok,1)<0){
         perror("Eroare la scrierea raspunsului in urma votarii:\n");
     }

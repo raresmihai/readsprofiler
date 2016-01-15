@@ -13,6 +13,15 @@ void recomandare_carti(int client_descriptor)
         perror("Eroare la citirea usernameului pentru recomandare.\n");
     }
 
+    char isbn[20];
+    if(caz_recomandare == 2)
+    {
+        if(read(client_descriptor,&isbn,20)<0)
+        {
+            perror("Eroare la citirea isbn-ului pentru recomandare.\n");
+        }
+    }
+
 
     switch(caz_recomandare)
     {
@@ -20,7 +29,7 @@ void recomandare_carti(int client_descriptor)
         recomanda_top_5_carti(client_descriptor);
         break;
     case 2:
-        //recomandari_similare(client_descriptor,username);
+        recomandari_similare(client_descriptor,isbn);
         break;
     case 3:
         recomandari_dupa_istoric(client_descriptor,username);
@@ -323,6 +332,78 @@ bool cartea_nu_a_fost_deja_adaugata(SugestieCarte *recomandari, char *isbn)
     return true;
 }
 
+void recomandari_similare(int client_descriptor,char *isbn)
+{
+    SugestieCarte recomandariSimilare[1000];
+    bzero(&recomandariSimilare,sizeof(recomandariSimilare));
+    char interogare[1000];
+    char username_similar[50];
+    char isbn_sugestie[20];
+    int nr_voturi;
+    QSqlQuery query;
+    QSqlQuery query_nrVoturi;
+    QSqlQuery query_isbn;
+    sprintf(interogare,"SELECT username FROM rating_utilizatori WHERE isbn = '%s'",isbn);
+    if(!query.exec(interogare)){
+        qDebug() << "Eroare la select usernames in recomandare:\n" << query.lastError();
+    }
+    while(query.next())
+    {
+        strcpy(username_similar,query.value(0).toString().toStdString().c_str());
+        sprintf(interogare,"SELECT isbn FROM rating_utilizatori WHERE username = '%s' AND isbn != '%s'",username_similar,isbn);
+        if(!query_isbn.exec(interogare)){
+            qDebug() << "Eroare la selectarea isbnurilor recomandarilor similare:\n" << query.lastError();
+        }
+        while(query_isbn.next())
+        {
+            strcpy(isbn_sugestie,query_isbn.value(0).toString().toStdString().c_str());
+            sprintf(interogare,"SELECT nr_voturi FROM rating WHERE isbn = '%s'",isbn_sugestie);
+            if(!query_nrVoturi.exec(interogare)){
+                qDebug() << "Eroare la selectarea isbnurilor recomandarilor similare:\n" << query.lastError();
+            }
+            query_nrVoturi.first();
+            nr_voturi = query_nrVoturi.value(0).toInt();
+            adauga_sugestie_noua(recomandariSimilare,isbn_sugestie,(double)nr_voturi);
+        }
+    }
+
+    int nr_recomandari = sortare_dupa_grad(recomandariSimilare);
+
+    int caz_recomandare_client = 2;
+    if(nr_recomandari < 5)
+    {
+        if(nr_recomandari == 0)
+        {
+            caz_recomandare_client = 1;
+            write(client_descriptor,&caz_recomandare_client,4);
+            recomanda_top_5_carti(client_descriptor);
+        }
+        else
+        {
+            write(client_descriptor,&caz_recomandare_client,4);
+            SugestieCarte topCarti[1000];
+            bzero(&topCarti,sizeof(topCarti));
+            int nr_top_recomandari = top_carti_dupa_rating(topCarti);
+            int i=0;
+            while(nr_recomandari<5 && i<nr_top_recomandari)
+            {
+                if(cartea_nu_a_fost_deja_adaugata(recomandariSimilare,topCarti[i].isbn))
+                {
+                    recomandariSimilare[nr_recomandari] = topCarti[i];
+                    nr_recomandari++;
+                }
+                i++;
+            }
+            trimite_recomandarile_clientului(client_descriptor,recomandariSimilare);
+        }
+    }
+    else
+    {
+        write(client_descriptor,&caz_recomandare_client,4);
+        trimite_recomandarile_clientului(client_descriptor,recomandariSimilare);
+    }
+}
+
 void trimite_recomandarile_clientului(int client_descriptor, SugestieCarte *recomandari)
 {
     QSqlQuery query;
@@ -352,3 +433,5 @@ void trimite_recomandarile_clientului(int client_descriptor, SugestieCarte *reco
         }
     }
 }
+
+

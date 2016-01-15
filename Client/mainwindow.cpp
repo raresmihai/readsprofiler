@@ -17,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent,char *user) :
     this->setFixedSize(this->size());
     ui->label_welcome->setAlignment(Qt::AlignCenter);
     ui->tabWidget->setTabsClosable(true);
+    ui->tabWidget->tabBar()->tabButton(0,QTabBar::RightSide)->resize(0,0);
+    ui->tabWidget->tabBar()->tabButton(1,QTabBar::RightSide)->resize(0,0);
     connect(ui->tabWidget,SIGNAL(tabCloseRequested(int)),this,SLOT(close_tab(int)));
     nr_genuri = 1;
     nr_subgenuri = 1;
@@ -26,7 +28,8 @@ MainWindow::MainWindow(QWidget *parent,char *user) :
     ui->gen2->hide();ui->gen3->hide();ui->gen4->hide();
     ui->subgen2->hide();ui->subgen3->hide();ui->subgen4->hide();
     ui->tabWidget->setCurrentIndex(0);
-    afisare_recomandari();
+    ui->tab_main->setWindowFlags(Qt::WindowTitleHint);
+    afisare_recomandari(1,0);
 }
 
 
@@ -40,7 +43,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-   // ui->tabWidget->setTabEnabled(1,false);
+    // ui->tabWidget->setTabEnabled(1,false);
     QTreeWidgetItem *selectedItem = ui->treeWidget->currentItem();
     if(selectedItem!=NULL)
     {
@@ -114,7 +117,7 @@ void MainWindow::on_pushButton_clicked()
 
         QLabel *status_votare = new QLabel("Vot inregistrat!",gbox);
         status_votare->hide();
-        status_votare->setGeometry(550,140,120,25);
+        status_votare->setGeometry(550,140,220,25);
         status_votare->setAlignment(Qt::AlignCenter);
         status_votare->setFrameStyle(QFrame::Box | QFrame::Sunken);
         status_votare->setObjectName("status_votare" + QString::number(total_taburi));
@@ -175,6 +178,8 @@ void MainWindow::on_pushButton_clicked()
 
         nr_taburi++;
         total_taburi++;
+
+        afisare_recomandari(2,(char *)isbn->text().toStdString().c_str());
     }
 
 }
@@ -183,8 +188,8 @@ void MainWindow::close_tab(int index)
 {
     if(index>1)
     {
-         ui->tabWidget->removeTab(index);
-         nr_taburi--;
+        ui->tabWidget->removeTab(index);
+        nr_taburi--;
     }
 }
 
@@ -302,8 +307,18 @@ void MainWindow::voteaza_carte()
         btn_voteaza->close();
         valori_rating->close();
         QLabel *status_votare = gbox->findChild<QLabel *>("status_votare" + nr_tab);
-        status_votare->show();
 
+        status_votare->show();
+    }
+    else
+    {
+        QGroupBox *gbox = ui->tabWidget->findChild<QGroupBox *>("gbox" + nr_tab);
+        QPushButton *btn_voteaza = gbox->findChild<QPushButton *>("btn_voteaza" + nr_tab);
+        btn_voteaza->close();
+        valori_rating->close();
+        QLabel *status_votare = gbox->findChild<QLabel *>("status_votare" + nr_tab);
+        status_votare->setText("Ai votat deja aceasta carte.");
+        status_votare->show();
     }
 }
 
@@ -408,7 +423,7 @@ void MainWindow::on_browse_continut_clicked()
     QString filename = QFileDialog::getOpenFileName(this,tr("Alege fisierul"), "",tr("Fisiere (*)"));
     QFile fileIn(filename);
     fileIn.open(QFile::ReadOnly);
-    QByteArray fileData = fileIn.readAll();    
+    QByteArray fileData = fileIn.readAll();
     if(fileData.size() > 0 && fileData.size() < 2000000)
     {
         upload.setare_continut(fileData);
@@ -428,11 +443,11 @@ void MainWindow::on_btn_cautare_clicked()
     QString qan_aparitie = ui->cautare_an->text();
     QString qrating = ui->cautare_rating->currentText();
 
-    bool ok;//scadere 1 din rating pentru potrivirea cu afisarea imaginilor
+    bool ok;
     int val_rating;
     val_rating = qrating.toInt(&ok,10);
     if(ok){
-        qrating = QString::number(val_rating-1);
+        qrating = QString::number(val_rating);
     }
 
     detaliiCautare copieDate;
@@ -455,7 +470,7 @@ void MainWindow::on_btn_cautare_clicked()
         QTreeWidgetItem *newItem = new QTreeWidgetItem;
         newItem->setText(0,QString::number(tree_index));
         newItem->setText(1,cautare.rezultate[i].titlu);
-        QString autor(QString::fromStdString(cautare.rezultate[i].nume_autor) + " " + QString::fromStdString(cautare.rezultate[i].prenume_autor));
+        QString autor(QString::fromStdString(cautare.rezultate[i].prenume_autor) + " " + QString::fromStdString(cautare.rezultate[i].nume_autor));
         newItem->setText(2,autor);
         newItem->setText(3,cautare.rezultate[i].genuri);
         newItem->setText(4,cautare.rezultate[i].subgenuri);
@@ -468,55 +483,63 @@ void MainWindow::on_btn_cautare_clicked()
         tree_index++;
     }
     ui->tabWidget->setCurrentIndex(0);
-    afisare_recomandari();
+    afisare_recomandari(1,0);
 }
 
-void MainWindow::afisare_recomandari()
+void MainWindow::afisare_recomandari(int pagina,char *isbn)
 {
-    int caz_afisare = qrand() % 4;
-    int caz_recomandare = 3;
-    if(caz_afisare==0)
+
+    int caz_recomandare = 3;//istoric
+    if(pagina == 2)
+    {
+        caz_recomandare = 2;//similare
+    }
+    else
+    {
+        int caz_afisare = qrand() % 4;//sansa 1/4 sa nimereaca top, in rest -> recomandari bazate pe istoric
+        if(caz_afisare == 0)
+        {
+            caz_recomandare = 1;//top
+        }
+    }
+    caz_recomandare = recomandare.cere_recomandari(caz_recomandare,username,isbn);
+    if(caz_recomandare == 1)
     {
         ui->label_recomandari->setText("Top 5 carti cu cel putin 3 voturi:");
-        caz_recomandare = 1;
     }
-
-    caz_recomandare = recomandare.cere_recomandari(caz_recomandare,username);
-    if(caz_recomandare > 0)
-    {
-        for(int i=0;i<5;i++)
+    else
+        if(caz_recomandare == 2)
         {
-            if(caz_recomandare == 1)
-            {
-                ui->label_recomandari->setText("Top 5 carti cu cel putin 3 voturi:");
-            }
-            else
-            {
-                ui->label_recomandari->setText("S-ar putea sa iti placa:");
-            }
+            ui->label_recomandari->setText("Utilizatorii au apreciat de asemenea:");
+        }
+        else
+        {
+            ui->label_recomandari->setText("S-ar putea sa iti placa:");
+        }
 
-            QByteArray coperta = recomandare.primeste_recomandare(i);
-            QPixmap pixmap_coperta = QPixmap();
-            pixmap_coperta.loadFromData(coperta);
-            QIcon ButtonIcon(pixmap_coperta);
-            switch(i)
-            {
-            case 0:
-                ui->recomandare1->setIcon(ButtonIcon);
-                break;
-            case 1:
-                ui->recomandare2->setIcon(ButtonIcon);
-                break;
-            case 2:
-                ui->recomandare3->setIcon(ButtonIcon);
-                break;
-            case 3:
-                ui->recomandare4->setIcon(ButtonIcon);
-                break;
-            case 4:
-                ui->recomandare5->setIcon(ButtonIcon);
-                break;
-            }
+    for(int i=0;i<5;i++)
+    {
+        QByteArray coperta = recomandare.primeste_recomandare(i);
+        QPixmap pixmap_coperta = QPixmap();
+        pixmap_coperta.loadFromData(coperta);
+        QIcon ButtonIcon(pixmap_coperta);
+        switch(i)
+        {
+        case 0:
+            ui->recomandare1->setIcon(ButtonIcon);
+            break;
+        case 1:
+            ui->recomandare2->setIcon(ButtonIcon);
+            break;
+        case 2:
+            ui->recomandare3->setIcon(ButtonIcon);
+            break;
+        case 3:
+            ui->recomandare4->setIcon(ButtonIcon);
+            break;
+        case 4:
+            ui->recomandare5->setIcon(ButtonIcon);
+            break;
         }
     }
 }
@@ -562,7 +585,7 @@ void MainWindow::clear_qlines()
     ui->cautare_gen->clear();
     ui->cautare_nume->clear();
     ui->cautare_prenume->clear();
-    ui->cautare_rating->clear();
+    ui->cautare_rating->setCurrentIndex(0);
     ui->cautare_subgen->clear();
     ui->cautare_titlu->clear();
 }
@@ -600,4 +623,20 @@ void MainWindow::on_recomandare5_clicked()
     clear_qlines();
     ui->cautare_isbn->setText(QString(recomandare.isbn_recomandari[4]));
     ui->btn_cautare->click();
+}
+
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    if(index>1)
+    {
+        QString nr_tab = ui->tabWidget->currentWidget()->objectName();
+        QLabel *isbn_label = ui->tabWidget->findChild<QGroupBox *>("gbox"+nr_tab)->findChild<QLabel *>("isbn" + nr_tab);
+        char isbn[20];
+        strcpy(isbn,isbn_label->text().toStdString().c_str());
+        afisare_recomandari(2,isbn);
+    }
+    else
+    {
+        afisare_recomandari(1,0);
+    }
 }

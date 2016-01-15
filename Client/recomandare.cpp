@@ -5,7 +5,7 @@ Recomandare::Recomandare()
     caz = 4;
 }
 
-int Recomandare::cere_recomandari(int caz_recomandare,char * username)
+int Recomandare::cere_recomandari(int caz_recomandare,char * username,char *isbn)
 {
     if(conectat==0){
         conectare_la_server();
@@ -20,15 +20,36 @@ int Recomandare::cere_recomandari(int caz_recomandare,char * username)
     }
     trimite_username_la_server(username);
 
+    if(caz_recomandare == 2)
+    {
+        return recomandari_similare(isbn);
+    }
     if(caz_recomandare == 3)
     {
         return recomandari_bazate_pe_istoric();
     }
-    return caz_recomandare;
+    return 1;
 }
 
 int Recomandare::recomandari_bazate_pe_istoric()
 {
+    int caz_recomandare_primit;
+    if(read(sd,&caz_recomandare_primit,4)<0)
+    {
+        conectat = 0;
+        return 0;
+    }
+    return caz_recomandare_primit;
+}
+
+int Recomandare::recomandari_similare(char *isbn)
+{
+    char copieISBN[20];
+    strcpy(copieISBN,isbn);
+    if(write(sd,&copieISBN,20)<0){
+        conectat = 0;
+        return 0;
+    }
     int caz_recomandare_primit;
     if(read(sd,&caz_recomandare_primit,4)<0)
     {

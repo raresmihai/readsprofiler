@@ -58,7 +58,7 @@ int top_carti_dupa_rating(SugestieCarte *topCarti);
 
 void recomanda_top_5_carti(int client_descriptor);
 
-void recomandari_similare(int client_descriptor, char *username);
+void recomandari_similare(int client_descriptor,char *isbn);
 
 void recomandari_dupa_istoric(int client_descriptor, char *username);
 

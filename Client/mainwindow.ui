@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Reads Profiler</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../Desktop/icon.jpg</normaloff>../../Desktop/icon.jpg</iconset>
+  </property>
   <property name="tabShape">
    <enum>QTabWidget::Rounded</enum>
   </property>
@@ -22,7 +26,7 @@
      <rect>
       <x>420</x>
       <y>10</y>
-      <width>271</width>
+      <width>361</width>
       <height>20</height>
      </rect>
     </property>
@@ -42,25 +46,18 @@
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+      <italic>true</italic>
+     </font>
+    </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
     </property>
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QCommandLinkButton" name="commandLinkButton">
-     <property name="geometry">
-      <rect>
-       <x>300</x>
-       <y>0</y>
-       <width>81</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Profil</string>
-     </property>
-    </widget>
    </widget>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
@@ -72,7 +69,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_main">
      <attribute name="title">
@@ -823,7 +820,10 @@
      </rect>
     </property>
     <property name="text">
-     <string>                                           Reads Profiler</string>
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../Desktop/readsprofiler.png</pixmap>
     </property>
    </widget>
    <widget class="QPushButton" name="recomandare1">
@@ -986,6 +986,46 @@
    </widget>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>pushButton</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>treeWidget</tabstop>
+  <tabstop>titlu_carte</tabstop>
+  <tabstop>nume_autor</tabstop>
+  <tabstop>prenume_autor</tabstop>
+  <tabstop>an_aparitie</tabstop>
+  <tabstop>gen_plus</tabstop>
+  <tabstop>subgen_plus</tabstop>
+  <tabstop>subgen1</tabstop>
+  <tabstop>isbn</tabstop>
+  <tabstop>descriere</tabstop>
+  <tabstop>browse_coperta</tabstop>
+  <tabstop>browse_continut</tabstop>
+  <tabstop>gen1</tabstop>
+  <tabstop>gen2</tabstop>
+  <tabstop>gen3</tabstop>
+  <tabstop>gen4</tabstop>
+  <tabstop>gen_minus</tabstop>
+  <tabstop>subgen_minus</tabstop>
+  <tabstop>subgen2</tabstop>
+  <tabstop>subgen3</tabstop>
+  <tabstop>subgen4</tabstop>
+  <tabstop>upload_btn</tabstop>
+  <tabstop>cautare_nume</tabstop>
+  <tabstop>cautare_prenume</tabstop>
+  <tabstop>cautare_titlu</tabstop>
+  <tabstop>cautare_gen</tabstop>
+  <tabstop>cautare_subgen</tabstop>
+  <tabstop>cautare_an</tabstop>
+  <tabstop>cautare_isbn</tabstop>
+  <tabstop>cautare_rating</tabstop>
+  <tabstop>btn_cautare</tabstop>
+  <tabstop>recomandare1</tabstop>
+  <tabstop>recomandare2</tabstop>
+  <tabstop>recomandare3</tabstop>
+  <tabstop>recomandare4</tabstop>
+  <tabstop>recomandare5</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -85,24 +85,7 @@ int main(int argc, char *argv[])
 
         pthread_create(&th[i], NULL, &treat_client, td);
     }
-    /*char buffer[10000];
 
-    FILE* p_infile = 0;
-    FILE* p_outfile = 0;
-    int length = 0;
-    int done = 0;
-    p_infile = fopen("rating.png","r");
-    if(p_infile==NULL) perror("Eroare deschidere fisier");
-    else{
-        fgets(buffer,10000,p_infile);
-    }
-    QByteArray inByteArray(buffer,10000);
-    QSqlQuery query;
-    query.prepare( "INSERT INTO fisiere (nume, imagedata) VALUES ('rating.png', :imageData)" );
-        query.bindValue( ":imageData", inByteArray );
-        if( !query.exec() )
-            qDebug() << "Error inserting image into table:\n" << query.lastError();
-*/
     return a.exec();
 }
 
@@ -117,7 +100,7 @@ static void *treat_client(void * arg)
     bool clientulEsteConectat = true;
     while(clientulEsteConectat)
     {
-        if(read(tdL.cl, &caz,sizeof(int)) <= 0) //e posibil sa trebuiasca select
+        if(read(tdL.cl, &caz,sizeof(int)) <= 0)
         {
             printf("[Thread %d]\n",tdL.idThread);
             perror ("Eroare la read() de la client pt caz. Se inchide conexiunea...\n");

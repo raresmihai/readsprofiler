@@ -18,7 +18,7 @@ void cautare(int client_descriptor)
 
     char interogare[1000];
     QSqlQuery query;
-    sprintf(interogare,"SELECT DISTINCT carti.isbn,titlu,nume,prenume,an_aparitie,IFNULL(valoare/nr_voturi,0),descriere FROM carti JOIN autori ON carti.id_autor=autori.id_autor JOIN genuri_carte ON carti.isbn=genuri_carte.isbn JOIN genuri ON genuri_carte.id_gen=genuri.id_gen JOIN rating ON carti.isbn=rating.isbn JOIN subgenuri_carte ON subgenuri_carte.isbn=carti.isbn JOIN subgenuri ON subgenuri.id_subgen=subgenuri_carte.id_subgen WHERE nume LIKE '%%%s%%' AND prenume LIKE '%%%s%%' AND titlu LIKE '%%%s%%' AND carti.isbn LIKE '%%%s%%' AND nume_gen LIKE '%%%s%%' AND nume_subgen LIKE '%%%s%%' AND an_aparitie LIKE '%%%s%%' AND IFNULL(floor(valoare/nr_voturi),0) LIKE '%%%s%%'",cautare.nume_autor,cautare.prenume_autor,cautare.titlu,cautare.isbn,cautare.gen,cautare.subgen,cautare.an_aparitie,cautare.rating);
+    sprintf(interogare,"SELECT DISTINCT carti.isbn,titlu,nume,prenume,an_aparitie,IFNULL(valoare/nr_voturi,0),descriere FROM carti JOIN autori ON carti.id_autor=autori.id_autor JOIN genuri_carte ON carti.isbn=genuri_carte.isbn JOIN genuri ON genuri_carte.id_gen=genuri.id_gen JOIN rating ON carti.isbn=rating.isbn JOIN subgenuri_carte ON subgenuri_carte.isbn=carti.isbn JOIN subgenuri ON subgenuri.id_subgen=subgenuri_carte.id_subgen WHERE nume LIKE '%%%s%%' AND prenume LIKE '%%%s%%' AND titlu LIKE '%%%s%%' AND carti.isbn LIKE '%%%s%%' AND nume_gen LIKE '%%%s%%' AND nume_subgen LIKE '%%%s%%' AND an_aparitie LIKE '%%%s%%' AND IFNULL(ceil(valoare/nr_voturi),0) LIKE '%%%s%%'",cautare.nume_autor,cautare.prenume_autor,cautare.titlu,cautare.isbn,cautare.gen,cautare.subgen,cautare.an_aparitie,cautare.rating);
     if(!query.exec(interogare))
     {
         qDebug() << "Eroare la cautarea cartii in tabele:\n" << query.lastError();
@@ -81,7 +81,7 @@ void cautare(int client_descriptor)
         if(trebuieInserata)
         {
             QSqlQuery query_inserareCarte;
-            sprintf(interogare,"SELECT id FROM cautari_utilizatori WHERE username = '%s' AND isbn = '%s'",username,isbn);
+           /* sprintf(interogare,"SELECT id FROM cautari_utilizatori WHERE username = '%s' AND isbn = '%s'",username,isbn);
             if(!query_inserareCarte.exec(interogare))
             {
                 qDebug() << "Eroare la verificarea existentei cartii in tabela cautari_utilizatori:\n" << query.lastError();
@@ -93,6 +93,12 @@ void cautare(int client_descriptor)
                 {
                     qDebug() << "Eroare la inserare cartii in tabela cautari_utilizatori:\n" << query.lastError();
                 }
+            }
+            */
+            sprintf(interogare,"INSERT INTO cautari_utilizatori(username,isbn) VALUES('%s','%s')",username,isbn);
+            if(!query_inserareCarte.exec(interogare))
+            {
+                qDebug() << "Eroare la inserare cartii in tabela cautari_utilizatori:\n" << query.lastError();
             }
         }
     }

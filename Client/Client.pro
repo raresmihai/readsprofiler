@@ -41,3 +41,8 @@ FORMS    += loginwindow.ui \
 
 RESOURCES += \
     imagini.qrc
+
+DISTFILES += \
+    icon.rc
+
+RC_FILE = icon.rc

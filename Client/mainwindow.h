@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QTextBrowser>
+#include <QCommandLinkButton>
 #include "upload.h"
 #include "cautare.h"
 #include "detail.h"
@@ -62,6 +63,10 @@ private slots:
 
     void on_recomandare5_clicked();
 
+
+
+    void on_tabWidget_currentChanged(int index);
+
 private:
     Ui::MainWindow *ui;
     int nr_genuri;
@@ -80,7 +85,7 @@ private:
     void setare_genuri(detaliiCarte &copieCarte);
     void setare_subgenuri(detaliiCarte &copieCarte);
     void clear_qlines();
-    void afisare_recomandari();
+    void afisare_recomandari(int pagina,char *isbn);
     QIcon setare_rating(double rating);
     QPixmap imagine_rating(double rating);
 };
