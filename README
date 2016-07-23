@@ -1,5 +1,6 @@
-Client-Server application that provides acccess to an online library.
+<b>Client-Server</b> application that provides acccess to an <b>online library</b>.
 Users can search the books based on different filters:
+
 - genre
 - author
 - title
@@ -8,13 +9,12 @@ Users can search the books based on different filters:
 - rating
 
 They can also download or upload books in pdf format.
-Every user activity(book search, book access, book download) is stored in a mysql database and, based on this info,
-the server provides book suggestions.
+Every user activity(book search, book access, book download) is stored in a mysql database and, based on this info, the server provides <b>book suggestions</b>.
 
 The suggestions are based on various factors such as:
 - user preferences
 - similar users(that have similar book preferences)
 - book rating
 
-The book suggestions algorithm becomes better as user activity grows.
+The <b>book suggestions algorithm</b> becomes better as user activity grows.
 
